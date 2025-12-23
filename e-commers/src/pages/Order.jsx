@@ -1,83 +1,175 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import axios from "axios"
+import { Row, Col, Card, Button, Form } from "react-bootstrap"
 
 function Order() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const products = location.state?.products || [];
-  const total = location.state?.total || 0;
+  const products = location.state?.products || []
+  const total = location.state?.total || 0
 
-  const [address, setAddress] = useState("");
-  const [payment, setPayment] = useState("cod");
+  const userId = localStorage.getItem("userId")
 
-  const handlePayment = async () => {
-    if (!address.trim()) {
-      alert("Please enter delivery address");
-      return;
+  const [address, setAddress] = useState({
+    name: "",
+    phone: "",
+    place: "",
+    pin: "",
+    fullAddress: "",
+  })
+
+  const [payment, setPayment] = useState("cod")
+
+  const handleChange = (e) => {
+    setAddress({ ...address, [e.target.name]: e.target.value })
+  }
+
+  const placeOrder = async () => {
+    if (
+      !address.name ||
+      !address.phone ||
+      !address.place ||
+      !address.pin ||
+      !address.fullAddress
+    ) {
+      alert("Please fill all address fields")
+      return
     }
 
     try {
       await axios.post("http://localhost:5000/orders", {
-        userId: localStorage.getItem("userId"),
-        items: products,
+        userId,
+        products,
         total,
         address,
         payment,
-        date: new Date().toDateString(),
-      });
+        date: new Date().toLocaleString(),
+      })
 
-      alert("Order placed successfully ");
-      navigate("/orders");
-    } catch (error) {
-      console.log(error);
-      alert("Something went wrong. Try again.");
+      alert("Order placed successfully ")
+      navigate("/orders")
+    } catch (err) {
+      console.log(err)
     }
-  };
+  }
 
   return (
-    <div className="container mt-4">
-      <h2>Order Summary</h2>
+    <div className="container my-5">
+      <Row className="g-4">
+        {/* LEFT */}
+        <Col md={8}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Body>
+              <h4 className="mb-3">Delivery Address</h4>
 
-      {products.map((item) => (
-        <div
-          key={item.id}
-          className="d-flex justify-content-between align-items-center mb-2"
-        >
-          <p className="mb-0">{item.name} x {item.quantity}</p>
-          <p className="mb-0">₹{item.price * item.quantity}</p>
-        </div>
-      ))}
+              <Row className="g-3">
+                <Col md={6}>
+                  <Form.Control
+                    placeholder="Full Name"
+                    name="name"
+                    value={address.name}
+                    onChange={handleChange}
+                  />
+                </Col>
 
-      <h4>Total: ₹{total}</h4>
+                <Col md={6}>
+                  <Form.Control
+                    placeholder="Phone Number"
+                    name="phone"
+                    value={address.phone}
+                    onChange={handleChange}
+                  />
+                </Col>
 
-      <div className="mt-4">
-        <h2>Confirm Order</h2>
+                <Col md={6}>
+                  <Form.Control
+                    placeholder="Place / City"
+                    name="place"
+                    value={address.place}
+                    onChange={handleChange}
+                  />
+                </Col>
 
-        <textarea
-          className="form-control mb-2"
-          placeholder="Enter delivery address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
+                <Col md={6}>
+                  <Form.Control
+                    placeholder="PIN Code"
+                    name="pin"
+                    value={address.pin}
+                    onChange={handleChange}
+                  />
+                </Col>
 
-        <select
-          className="form-select mb-2"
-          value={payment}
-          onChange={(e) => setPayment(e.target.value)}
-        >
-          <option value="cod">Cash on Delivery</option>
-          <option value="card">Credit / Debit Card</option>
-          <option value="upi">UPI</option>
-        </select>
+                <Col md={12}>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Full Address"
+                    name="fullAddress"
+                    value={address.fullAddress}
+                    onChange={handleChange}
+                  />
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
 
-        <button className="btn btn-success" onClick={handlePayment}>
-          Pay ₹{total}
-        </button>
-      </div>
+          <Card className="shadow-sm">
+            <Card.Body>
+              <h4 className="mb-3">Payment Method</h4>
+
+              <Form.Select
+                value={payment}
+                onChange={(e) => setPayment(e.target.value)}
+              >
+                <option value="cod">Cash on Delivery</option>
+                <option value="upi">UPI</option>
+                <option value="card">Credit / Debit Card</option>
+              </Form.Select>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        {/* RIGHT */}
+        <Col md={4}>
+          <Card className="shadow-sm position-sticky" style={{ top: "90px" }}>
+            <Card.Body>
+              <h4 className="mb-3">Order Summary</h4>
+
+              {products.map((item, index) => (
+                <div
+                  key={index}
+                  className="d-flex justify-content-between mb-2"
+                >
+                  <span>
+                    {item.name} × {item.quantity}
+                  </span>
+                  <strong>₹{item.price * item.quantity}</strong>
+                </div>
+              ))}
+
+              <hr />
+
+              <div className="d-flex justify-content-between fs-5">
+                <strong>Total</strong>
+                <strong className="text-success">₹{total}</strong>
+              </div>
+
+              <Button
+                variant="success"
+                className="w-100 mt-4"
+                size="lg"
+                onClick={placeOrder}
+              >
+                Pay ₹{total}
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
-  );
+  )
 }
 
-export default Order;
+export default Order

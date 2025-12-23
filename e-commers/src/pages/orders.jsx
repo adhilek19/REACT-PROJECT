@@ -1,72 +1,122 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/orders?userId=${userId}`)
-      .then((res) => setOrders(res.data));
+    if (!userId) {
+      setError("Please login to view your orders");
+      setLoading(false);
+      return;
+    }
+
+    const fetchOrders = async () => {
+      try {
+        // 🔥 Fetch ALL orders
+        const res = await axios.get("http://localhost:5000/orders");
+
+        // 🔥 HARD FILTER — only logged-in user orders
+        const userOrders = res.data.filter(
+          (order) => order.userId === userId
+        );
+
+        setOrders(userOrders);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
   }, [userId]);
 
-  const cancelOrder = async (orderId) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this order?"
-    );
-    if (!confirmCancel) return;
-
-    try {
-      await axios.delete(`http://localhost:5000/orders/${orderId}`);
-      setOrders((prev) => prev.filter((order) => order.id !== orderId));
-      alert("Order cancelled successfully ");
-    } catch (err) {
-      console.log(err);
-      alert("Failed to cancel order");
-    }
-  };
+  if (loading) return <p className="text-center mt-4">Loading orders...</p>;
+  if (error) return <p className="text-center text-danger mt-4">{error}</p>;
 
   return (
-    <div className="container mt-4">
-      <h2>My Orders</h2>
+    <div className="container my-4">
+      <h2 className="text-center mb-4">My Orders</h2>
 
-      {orders.length === 0 && <p>No orders yet</p>}
+      {orders.length === 0 && (
+        <p className="text-center text-muted">No orders found</p>
+      )}
 
-      {orders.map((order) => (
-        <div key={order.id} className="card mb-3 p-3">
-          <h6>Order ID: {order.id}</h6>
-          <p>Date: {order.date}</p>
+      {orders.map((order) => {
+        const items = order.products || order.items || [];
 
-          {order.items.map((item) => (
-            <div
-              key={item.id}
-              className="d-flex justify-content-between align-items-center"
-            >
-              <img src={item.image} width="50" alt={item.name} />
-              <span>
-                {item.name} x {item.quantity}
-              </span>
-              <span>₹{item.price * item.quantity}</span>
+        return (
+          <div key={order.id} className="card mb-4 shadow-sm p-3">
+            {/* HEADER */}
+            <div className="d-flex justify-content-between">
+              <div>
+                <h6>Order ID: #{order.id}</h6>
+                <small className="text-muted">{order.date}</small>
+              </div>
+              <strong className="text-success">₹{order.total}</strong>
             </div>
-          ))}
 
-          <hr />
-          <strong>Total: ₹{order.total}</strong>
-          <p>Payment: {order.payment}</p>
-          <p>Address: {order.address}</p>
+            <hr />
 
-        
-          <div className="text-end mt-2">
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => cancelOrder(order.id)}
-            >
-              Cancel Order
-            </button>
+            {/* PRODUCTS */}
+            {items.map((item, index) => (
+              <div
+                key={index}
+                className="d-flex justify-content-between align-items-center mb-2"
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    width="60"
+                    height="60"
+                    style={{ objectFit: "contain" }}
+                  />
+                  <span>
+                    {item.name} × {item.quantity}
+                  </span>
+                </div>
+                <strong>₹{item.price * item.quantity}</strong>
+              </div>
+            ))}
+
+            <hr />
+
+            {/* ADDRESS */}
+            {order.address && (
+              <>
+                <h6>Delivery Address</h6>
+                <p className="mb-1">
+                  <strong>{order.address.name}</strong> –{" "}
+                  {order.address.phone}
+                </p>
+                <p className="mb-1">{order.address.fullAddress}</p>
+                <p className="mb-0">
+                  {order.address.place} – {order.address.pin}
+                </p>
+                <hr />
+              </>
+            )}
+
+            {/* FOOTER */}
+            <div className="d-flex justify-content-between align-items-center">
+              <span>
+                <strong>Payment:</strong>{" "}
+                {order.payment?.toUpperCase()}
+              </span>
+              <span className="badge bg-success text-capitalize">
+                {order.status || "placed"}
+              </span>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

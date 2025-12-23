@@ -6,6 +6,10 @@ import{useNavigate} from 'react-router-dom'
 
 
 function Register() {
+
+
+   const [showpass,setShowpass]=useState(false);
+   
  const navigate= useNavigate();
  
  
@@ -80,6 +84,23 @@ const validation=()=>{
     }
    }
 
+  
+   const checkemail = async(e)=>{
+      const email= e.target.value;
+      const res = await fetch(`http://localhost:5000/users?email=${email}`);
+      const data = await res.json();
+     
+      if (data.length>0){
+
+         alert('email already exist');
+
+          setData(prev => ({...prev , email: " "}));
+         
+      }
+   } 
+
+
+   
   return (
     <div>
 
@@ -106,6 +127,8 @@ const validation=()=>{
    <input 
    type='email'
    name='email'
+   value={data.email}
+   onBlur={checkemail}
    placeholder='Enter your email'
       required
        onChange={handlechange}
@@ -114,19 +137,36 @@ const validation=()=>{
 
  <br/>
 
+<small>Password</small>
+<div style={{ position: "relative", width: "100%" }}>
+  <input
+    type={showpass ? "text" : "password"} 
+    name="password"
+    placeholder="Enter your password"
+    required
+    value={data.password}
+    onChange={handlechange}
+    style={{ width: "100%", paddingRight: "50px" }}
+  />
 
-   <small>Password</small>
-   <input 
-   type='password'
-   name='password'
-   placeholder='Enter your password'
-      required
-       onChange={handlechange}
-     
-     />
-     <p className='erorr'>{erorr.password}</p>
+  <button
+   
+    onClick={() => setShowpass(!showpass)} 
+    style={{
+      position: "absolute",
+      right: "1px",
+      top: "9px",
+      transform: "translateY(-50%)"
+    }}
+  >
+    {showpass ? "Hide" : "Show"} 
+  </button>
+</div>
+
+<p className="erorr">{erorr.password}</p>
+
 <button  type='submit'>
-<h5>Register</h5>
+<h5>   Register   </h5>
 </button>
 <br/>
 <p style={{textAlign:"center"}}>Already have an account?<a href='/Login'><i> Login here</i></a></p>
