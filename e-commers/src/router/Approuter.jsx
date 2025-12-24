@@ -11,6 +11,9 @@ import Morders from '../admin/Morders'
 import Mproducts from '../admin/Mproducts'
 import Musers from '../admin/Musers'
 import Alogin from '../admin/Alogin'
+import ProtectedRoute from '../admin/ProtectedRoute'
+import Navbar from '../navbar/Navbar'
+import Footer from '../navbar/Footer'
 
 
 
@@ -23,30 +26,31 @@ import Alogin from '../admin/Alogin'
 function Approuter({ cart, setCart }) {
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/product' element={<Product />} />
+      <Route path='/' element={<><Navbar cartCount={cart.length}/><Home /> <Footer/></>} />
+      <Route path='/register' element={<><Navbar cartCount={cart.length}/><Register /> <Footer/></>} />
+      <Route path='/login' element={<><Navbar cartCount={cart.length}/><Login /><Footer/></>} />
+      <Route path='/product' element={<><Navbar cartCount={cart.length}/><Product /><Footer/></>} />
 
   
       <Route
         path='/cart'
-        element={<Cart cart={cart} setCart={setCart} />}
-      />
+        element={<><Navbar cartCount={cart.length}/><Cart cart={cart} setCart={setCart} /><Footer/></>}/>
 
-      <Route path='/order' element={<Order />} />
-      <Route path='/orders' element={<Orders />} />
+      <Route path='/order' element={<><Navbar cartCount={cart.length}/><Order /> <Footer/></>} />
+      <Route path='/orders' element={<><Navbar cartCount={cart.length}/><Orders />  <Footer/></>}/>
 
 
 
       <Route path='/admin' element={<Alogin/>} />
-      <Route path='/admin/dashboard' element={<Dashboard/>} />
-      <Route path='/admin/products' element={<Mproducts />} />
-      <Route path='/admin/orders' element={<Morders />} />
+
+      <Route path='/admin/dashboard' element={
+        <ProtectedRoute><Dashboard/> </ProtectedRoute>} />
+      <Route path='/admin/products' element={<ProtectedRoute><Mproducts /> </ProtectedRoute>} />
+      <Route path='/admin/orders' element={ <ProtectedRoute><Morders /> </ProtectedRoute>} />
    
 
 
-      <Route path='/admin/users' element={<Musers/>}/>
+      <Route path='/admin/users' element={<ProtectedRoute><Musers/> </ProtectedRoute>}/>
 
 
 

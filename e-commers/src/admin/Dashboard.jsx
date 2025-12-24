@@ -6,9 +6,8 @@ import {
 } from "recharts";
 import Sidebar from "./Sidebar";
 
-<Sidebar/>
 
-// Card Component
+
 const Card = ({ title, value, color }) => (
   <div style={{ ...styles.card, borderTop: `5px solid ${color}` }}>
     <h4 style={{ marginBottom: "10px" }}>{title}</h4>
@@ -38,7 +37,7 @@ function Dashboard() {
         setOrders(ordersRes.data);
         setProducts(productsRes.data);
 
-        // Total revenue & monthly revenue
+      
         let totalRevenue = 0;
         const monthMap = {};
         ordersRes.data.forEach((order) => {
@@ -46,7 +45,7 @@ function Dashboard() {
           items.forEach((item) => {
             totalRevenue += item.price * item.quantity;
 
-            // Monthly revenue
+          
             const month = new Date(order.createdAt).toLocaleString("default", { month: "short" });
             monthMap[month] = (monthMap[month] || 0) + item.price * item.quantity;
           });
@@ -59,7 +58,7 @@ function Dashboard() {
         }));
         setMonthlyRevenue(monthlyData);
 
-        // Top Selling Products
+      
         const productMap = {};
         ordersRes.data.forEach((order) => {
           const items = order.items || order.products || [];
@@ -71,7 +70,7 @@ function Dashboard() {
 
         const topProductsData = Object.keys(productMap)
           .map((key) => ({ name: key, quantity: productMap[key] }))
-          .sort((a, b) => b.quantity - a.quantity) // descending
+          .sort((a, b) => b.quantity - a.quantity) // descendin
           .slice(0, 5); // top 5 products
 
         setTopProducts(topProductsData);
@@ -94,10 +93,10 @@ function Dashboard() {
 
         {/* Overview Cards */}
         <div style={styles.cardContainer}>
-          <Card title="Total Users" value={users.length} color="#28a745" />
-          <Card title="Total Orders" value={orders.length} color="#17a2b8" />
-          <Card title="Total Products" value={products.length} color="#ffc107" />
-          <Card title="Total Revenue" value={`₹ ${revenue}`} color="#6f42c1" />
+          <Card title="Total Users" value={users.length} />
+          <Card title="Total Orders" value={orders.length}  />
+          <Card title="Total Products" value={products.length}  />
+          <Card title="Total Revenue" value={`₹ ${revenue}`} />
         </div>
 
         {/* Monthly Revenue Chart */}

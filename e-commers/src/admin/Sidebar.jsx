@@ -6,7 +6,7 @@ function Sidebar() {
 
   const logout = () => {
     localStorage.removeItem("isAdmin");
-    navigate("/login");
+    navigate("/admin");
   };
 
   const links = [

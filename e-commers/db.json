@@ -866,7 +866,7 @@
       "status": "delivered"
     }
   ],
-  "Admin": [
+  "admin": [
     {
       "id": "776c",
       "name": "jamsheed ",
@@ -874,12 +874,14 @@
       "password": "1234567890",
       "role": "admin"
     },
+   
+   
     {
-      "id": "e0f3",
-      "name": "adhil ek",
+      "id": "f7fd",
+      "name":"adhilek",
       "email": "adhilek@gmail.com",
       "password": "12344321",
-      "role": "admin"
+      "role":"admin"
     }
   ]
 }

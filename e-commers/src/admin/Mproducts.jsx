@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Sidebar from "./Sidebar"; // import Sidebar
+import Sidebar from "./Sidebar";
 
 function Mproducts() {
   const [product, setProduct] = useState([]);
@@ -175,7 +175,7 @@ function Mproducts() {
           ))}
         </select>
 
-        {/* PRODUCT TABLE */}
+    
         <table
           border="1"
           cellPadding="10"

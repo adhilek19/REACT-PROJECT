@@ -31,10 +31,10 @@ function App() {
 
   return (
     <>
-      <Navbar cartCount={cart.length} />
+     
      
       <Approuter cart={cart} setCart={setCart} />
-      <Footer />
+   
     </>
   )
 }
