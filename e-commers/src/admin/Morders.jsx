@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../admin/css/Morder.css";
-import Sidebar from "./Sidebar"; // Import Sidebar
+import Sidebar from "./Sidebar"; 
 
 function Morders() {
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch orders and users
+  
   useEffect(() => {
     axios
       .get("http://localhost:5000/orders")
@@ -27,7 +27,7 @@ function Morders() {
       .catch((err) => console.log(err));
   }, []);
 
-  // Get user name (registered / guest)
+  
   const getUserName = (order) => {
     if (order.userId) {
       const user = users.find((u) => u.id === order.userId);
@@ -36,10 +36,10 @@ function Morders() {
     return order?.address?.name || "Guest";
   };
 
-  // Get pin code safely
+  
   const getPin = (order) => order?.address?.pin || "-";
 
-  // Mark delivered
+  
   const markDelivered = (id) => {
     axios
       .patch(`http://localhost:5000/orders/${id}`, { status: "delivered" })
@@ -59,10 +59,10 @@ function Morders() {
 
   return (
     <div style={{ display: "flex" }}>
-      {/* Sidebar */}
+  
       <Sidebar />
 
-      {/* Main content */}
+      
       <div className="morders-container" style={{ flex: 1, padding: "20px" }}>
         <h2>Admin – Manage Orders</h2>
 

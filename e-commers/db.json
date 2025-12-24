@@ -381,6 +381,15 @@
       "price": 76999,
       "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/i/8/y/-original-imahfjsfdmpbbhhb.jpeg?q=70&crop=false",
       "quantity": 1
+    },
+    {
+      "id": "b4b2",
+      "userId": "e0f3",
+      "productId": "1",
+      "name": "iPhone 17 ",
+      "price": "136999",
+      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/n/v/a/-original-imahft5nxmyqndhf.jpeg?q=70&crop=false",
+      "quantity": 1
     }
   ],
   "orders": [
@@ -874,14 +883,12 @@
       "password": "1234567890",
       "role": "admin"
     },
-   
-   
     {
       "id": "f7fd",
-      "name":"adhilek",
+      "name": "adhilek",
       "email": "adhilek@gmail.com",
       "password": "12344321",
-      "role":"admin"
+      "role": "admin"
     }
   ]
 }

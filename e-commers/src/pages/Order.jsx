@@ -58,7 +58,7 @@ function Order() {
   return (
     <div className="container my-5">
       <Row className="g-4">
-        {/* LEFT */}
+
         <Col md={8}>
           <Card className="mb-4 shadow-sm">
             <Card.Body>
@@ -131,7 +131,7 @@ function Order() {
           </Card>
         </Col>
 
-        {/* RIGHT */}
+
         <Col md={4}>
           <Card className="shadow-sm position-sticky" style={{ top: "90px" }}>
             <Card.Body>

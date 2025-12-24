@@ -12,7 +12,7 @@ function Product() {
 
   const currentUser = localStorage.getItem("userId");
 
-  // Fetch products
+  
   useEffect(() => {
     axios
       .get("http://localhost:5000/products")
@@ -20,7 +20,7 @@ function Product() {
       .catch((err) => console.log(err));
   }, []);
 
-  // Fetch user's cart
+
   useEffect(() => {
     if (!currentUser) return;
     axios
@@ -42,7 +42,7 @@ function Product() {
       );
 
       if (res.data.length > 0) {
-        // Product already in cart, increase quantity
+       
         const item = res.data[0];
         await axios.patch(`http://localhost:5000/cart/${item.id}`, {
           quantity: item.quantity + 1,
@@ -54,7 +54,7 @@ function Product() {
           )
         );
       } else {
-        // Add new product to cart
+   
         const newItem = {
           userId: currentUser,
           productId: curr.id,
@@ -64,7 +64,7 @@ function Product() {
           quantity: 1,
         };
         await axios.post("http://localhost:5000/cart", newItem);
-        setCart((prev) => [...prev, { ...newItem, id: Date.now() }]); // add locally
+        setCart((prev) => [...prev, { ...newItem, id: Date.now() }]); 
       }
 
       alert("Added to cart");
@@ -77,7 +77,7 @@ function Product() {
     navigate("/cart");
   };
 
-  // Filter products
+
   const filtered = product.filter((curr) => {
     const searched = curr.name.toLowerCase().includes(search.toLowerCase());
     return (category === "all" || curr.category === category) && searched;

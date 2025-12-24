@@ -19,34 +19,17 @@ function Footer() {
           </p>
         </div>
 
-        <div className="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li>Home</li>
-            <li>Shop</li>
-            <li>Offers</li>
-            <li>Contact</li>
-          </ul>
-        </div>
+       
 
-        <div className="footer-section">
-          <h4>Support</h4>
-          <ul>
-            <li>Help Center</li>
-            <li>Returns</li>
-            <li>Shipping</li>
-            <li>Warranty</li>
-          </ul>
-        </div>
+    
+   
 
         <div className="footer-section">
           <h4>Contact</h4>
           <p>Email: support@5gstore.com</p>
           <p>Phone: +91 98765 43210</p>
           <div className="socials">
-            <span>🌐</span>
-            <span>📘</span>
-            <span>📸</span>
+           
           </div>
         </div>
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Table, Button, Badge, Spinner } from "react-bootstrap";
 import Sidebar from "./Sidebar";
-import "../admin/css/Musers.css"; // we'll add custom table styles here
+import "../admin/css/Musers.css"; 
 
 function Musers() {
   const [users, setUsers] = useState([]);
@@ -48,10 +48,10 @@ function Musers() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
+  
       <Sidebar />
 
-      {/* Main content */}
+
       <div style={{ flex: 1, padding: "30px", background: "#f0f2f5" }}>
         <h2 className="mb-4" style={{ color: "#343a40" }}>
           Manage Users

@@ -17,10 +17,10 @@ function Orders() {
 
     const fetchOrders = async () => {
       try {
-        // 🔥 Fetch ALL orders
+
         const res = await axios.get("http://localhost:5000/orders");
 
-        // 🔥 HARD FILTER — only logged-in user orders
+   
         const userOrders = res.data.filter(
           (order) => order.userId === userId
         );
@@ -53,7 +53,7 @@ function Orders() {
 
         return (
           <div key={order.id} className="card mb-4 shadow-sm p-3">
-            {/* HEADER */}
+ 
             <div className="d-flex justify-content-between">
               <div>
                 <h6>Order ID: #{order.id}</h6>
@@ -64,7 +64,7 @@ function Orders() {
 
             <hr />
 
-            {/* PRODUCTS */}
+ 
             {items.map((item, index) => (
               <div
                 key={index}
@@ -87,9 +87,7 @@ function Orders() {
             ))}
 
             <hr />
-
-            {/* ADDRESS */}
-            {order.address && (
+           {order.address && (
               <>
                 <h6>Delivery Address</h6>
                 <p className="mb-1">
@@ -104,7 +102,7 @@ function Orders() {
               </>
             )}
 
-            {/* FOOTER */}
+         
             <div className="d-flex justify-content-between align-items-center">
               <span>
                 <strong>Payment:</strong>{" "}

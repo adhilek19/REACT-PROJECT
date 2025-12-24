@@ -10,7 +10,7 @@ function Cart() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch cart items
+
   const fetchCart = async () => {
     if (!currentUser) return;
     setLoading(true);
@@ -28,7 +28,7 @@ function Cart() {
     fetchCart();
   }, [currentUser, location.pathname]);
 
-  // Increase quantity
+
   const increaseQty = async (item) => {
     setCart((prev) =>
       prev.map((p) => (p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p))
@@ -39,7 +39,7 @@ function Cart() {
       });
     } catch (err) {
       console.error(err);
-      fetchCart(); // rollback if failed
+      fetchCart(); 
     }
   };
 

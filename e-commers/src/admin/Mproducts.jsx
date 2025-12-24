@@ -4,8 +4,6 @@ import Sidebar from "./Sidebar";
 
 function Mproducts() {
   const [product, setProduct] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [search, setSearch] = useState("");
 
   const [editproductid, setEditproductid] = useState(null);
   const [editformdata, setEditformdata] = useState({
@@ -24,7 +22,6 @@ function Mproducts() {
     specs: "",
   });
 
-  // Fetch products
   useEffect(() => {
     axios
       .get("http://localhost:5000/products")
@@ -32,9 +29,10 @@ function Mproducts() {
       .catch((err) => console.log(err));
   }, []);
 
-  // Add product
+
   const addProduct = (e) => {
     e.preventDefault();
+
     axios
       .post("http://localhost:5000/products", newProduct)
       .then((res) => {
@@ -50,7 +48,6 @@ function Mproducts() {
       .catch((err) => console.log(err));
   };
 
-  // Delete product
   const deletProduct = (id) => {
     if (window.confirm("Are you sure?")) {
       axios.delete(`http://localhost:5000/products/${id}`).then(() => {
@@ -59,7 +56,6 @@ function Mproducts() {
     }
   };
 
-  // Edit product
   const handleEdit = (item) => {
     setEditproductid(item.id);
     setEditformdata({
@@ -89,23 +85,13 @@ function Mproducts() {
       });
   };
 
-  const filteredProducts = product.filter((p) => {
-    const categoryMatch =
-      selectedCategory === "all" || p.category === selectedCategory;
-    const searchMatch = p.name.toLowerCase().includes(search.toLowerCase());
-    return categoryMatch && searchMatch;
-  });
-
   return (
     <div style={{ display: "flex" }}>
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main content */}
-      <div style={{ flex: 1, padding: "30px", background: "#f5f5f5" }}>
+      <div style={{ flex: 1, padding: "30px", background: "#fff" }}>
         <h2>Manage Products (Admin)</h2>
 
-        {/* ADD PRODUCT */}
         <form onSubmit={addProduct} style={{ marginBottom: 20 }}>
           <input
             placeholder="Product Name"
@@ -115,6 +101,7 @@ function Mproducts() {
             }
             required
           />
+
           <input
             placeholder="Category"
             value={newProduct.category}
@@ -123,6 +110,7 @@ function Mproducts() {
             }
             required
           />
+
           <input
             type="number"
             placeholder="Price"
@@ -132,6 +120,7 @@ function Mproducts() {
             }
             required
           />
+
           <input
             placeholder="Image URL"
             value={newProduct.image}
@@ -140,8 +129,9 @@ function Mproducts() {
             }
             required
           />
+
           <input
-            placeholder="Specs (e.g. 12GB RAM | 256GB Storage)"
+            placeholder="Specs"
             value={newProduct.specs}
             onChange={(e) =>
               setNewProduct({ ...newProduct, specs: e.target.value })
@@ -156,32 +146,8 @@ function Mproducts() {
           <button type="submit">Add Product</button>
         </form>
 
-        {/* SEARCH + FILTER */}
-        <input
-          placeholder="Search product..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          style={{ marginLeft: 10 }}
-        >
-          <option value="all">All Categories</option>
-          {[...new Set(product.map((p) => p.category))].map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
 
-    
-        <table
-          border="1"
-          cellPadding="10"
-          width="100%"
-          style={{ marginTop: 15 }}
-        >
+        <table border="1" cellPadding="10" width="100%">
           <thead>
             <tr>
               <th>Image</th>
@@ -194,7 +160,7 @@ function Mproducts() {
           </thead>
 
           <tbody>
-            {filteredProducts.map((item) => (
+            {product.map((item) => (
               <tr key={item.id}>
                 <td>
                   {editproductid === item.id ? (
@@ -210,6 +176,7 @@ function Mproducts() {
                     <img src={item.image} width="60" alt={item.name} />
                   )}
                 </td>
+
                 <td>
                   {editproductid === item.id ? (
                     <input
@@ -221,56 +188,51 @@ function Mproducts() {
                     item.name
                   )}
                 </td>
+
                 <td>
-                  {editproductid === item.id ? (
-                    <input
-                      name="specs"
-                      value={editformdata.specs}
-                      onChange={inputchange}
-                    />
-                  ) : (
-                    item.specs
-                  )}
-                </td>
-                <td>
-                  {editproductid === item.id ? (
-                    <input
-                      name="category"
-                      value={editformdata.category}
-                      onChange={inputchange}
-                    />
-                  ) : (
-                    item.category
-                  )}
-                </td>
-                <td>
-                  {editproductid === item.id ? (
-                    <input
-                      type="number"
-                      name="price"
-                      value={editformdata.price}
-                      onChange={inputchange}
-                    />
-                  ) : (
-                    `₹${item.price}`
-                  )}
-                </td>
-                <td>
-                  {editproductid === item.id ? (
-                    <>
-                      <button type="button" onClick={() => save(item.id)}>
-                        Save
-                      </button>
-                      <button type="button" onClick={handlecancel}>
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button type="button" onClick={() => handleEdit(item)}>
-                        Edit
-                      </button>
-                      <button type="button" onClick={() => deletProduct(item.id)}>
+           {editproductid === item.id ? (
+             <input
+               name="specs"
+               value={editformdata.specs}
+               onChange={inputchange}
+             />
+           ) : (
+             item.specs
+        )}
+      </td>
+      <td>
+        {editproductid === item.id ? (
+          <input
+                   name="category"
+                   value={editformdata.category}
+                   onChange={inputchange}
+                 />
+               ) : (
+                 item.category
+               )}
+             </td>
+             <td>
+               {editproductid === item.id ? (
+                 <input
+                   type="number"
+                   name="price"
+                   value={editformdata.price}
+                   onChange={inputchange}
+                 />
+               ) : (
+                 `₹${item.price}`
+               )}
+             </td>
+             <td>
+               {editproductid === item.id ? (
+                 <>
+                   <button onClick={() => save(item.id)}>Save</button>
+                   <button onClick={handlecancel}>Cancel</button>
+                 </>
+               ) : (
+                 <>
+                   <button onClick={() => handleEdit(item)}>Edit</button>
+                      <button onClick={() => deletProduct(item.id)}>
                         Delete
                       </button>
                     </>
@@ -279,7 +241,7 @@ function Mproducts() {
               </tr>
             ))}
 
-            {filteredProducts.length === 0 && (
+            {product.length === 0 && (
               <tr>
                 <td colSpan="6" align="center">
                   No products found
